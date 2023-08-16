@@ -1,0 +1,92 @@
+ARG ALPINE_VERSION=3.18
+FROM alpine:${ALPINE_VERSION}
+LABEL Maintainer="CauseFX <causefx@me.com>"
+LABEL Description="Lightweight container with Nginx 1.24 & PHP 8.1 based on Alpine Linux."
+
+# Setup document root
+WORKDIR /var/www/html
+
+# Install packages and remove default server definition
+RUN apk add --no-cache \
+  curl \
+  git \
+  nginx \
+  npm \
+  php81 \
+  php81-ctype \
+  php81-curl \
+  php81-dom \
+  php81-fileinfo \
+  php81-fpm \
+  php81-gd \
+  php81-iconv \
+  php81-intl \
+  php81-json \
+  php81-ldap \
+  php81-mbstring \
+  php81-mysqli \
+  php81-opcache \
+  php81-openssl \
+  php81-pcntl \
+  php81-pdo \
+  php81-pdo_mysql \
+  php81-pdo_sqlite \
+  php81-phar \
+  php81-session \
+  php81-simplexml \
+  php81-sqlite3 \
+  php81-tokenizer  \
+  php81-xml \
+  php81-xmlreader \
+  php81-xmlwriter \
+  php81-zip \
+  php81-zlib \
+  supervisor 
+
+RUN mkdir /home/npm
+RUN mkdir /home/composer
+
+ENV COMPOSER_HOME /home/composer
+
+RUN npm -g config set cache /home/npm
+
+# Configure nginx - http
+COPY config/nginx.conf /etc/nginx/nginx.conf
+
+# Configure nginx - default server
+COPY config/conf.d /etc/nginx/conf.d/
+
+# Configure PHP-FPM
+COPY config/fpm-pool.conf /etc/php81/php-fpm.d/www.conf
+COPY config/php.ini /etc/php81/conf.d/custom.ini
+
+# Configure supervisord
+COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Install composer from the official image
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+# Install Laravel
+RUN composer global require laravel/installer --optimize-autoloader --no-interaction --no-progress
+RUN composer global require symfony/var-dumper --optimize-autoloader --no-interaction --no-progress
+
+# Make sure files/folders needed by the processes are accessable when they run under the nobody user
+RUN chown -R nobody.nobody /var/www/html /run /var/lib/nginx /var/log/nginx /home/npm /home/composer
+
+# Switch to use a non-root user from here on
+USER nobody
+
+# Add application
+COPY --chown=nobody src/ /var/www/html/
+
+# Expose the port nginx is reachable on
+EXPOSE 8080
+
+# Let supervisord start nginx & php-fpm
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
+# Configure a healthcheck to validate that everything is up&running
+HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:8080/fpm-ping
+
+# Add Composer vendor to path
+ENV PATH="$PATH:/home/composer/vendor/bin"
