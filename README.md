@@ -1,5 +1,5 @@
-# Docker Laravel with PHP-FPM 8.1 & Nginx 1.24 on Alpine Linux
-Development Enviorment with PHP-FPM 8.1 & Nginx 1.24 container image for Docker, built on [Alpine Linux](https://www.alpinelinux.org/).
+# Docker Laravel with PHP-FPM 8.2 & Nginx 1.24 on Alpine Linux
+Development Enviorment with PHP-FPM 8.2 & Nginx 1.24 container image for Docker, built on [Alpine Linux](https://www.alpinelinux.org/).
 
 ## Usage
 
