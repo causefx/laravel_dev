@@ -1,5 +1,7 @@
 ARG PUID=nobody
 ARG PGID=nobody
+ENV PUID ${PUID}
+ENV PGID ${PGID}
 
 ARG ALPINE_VERSION=3.18
 FROM alpine:${ALPINE_VERSION}
@@ -51,8 +53,6 @@ RUN mkdir /home/npm
 RUN mkdir /home/composer
 
 ENV COMPOSER_HOME /home/composer
-ENV PUID ${PUID}
-ENV PGID ${PGID}
 
 RUN npm -g config set cache /home/npm
 
