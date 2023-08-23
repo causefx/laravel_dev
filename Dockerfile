@@ -1,3 +1,5 @@
+ARG PUID=nobody
+ARG PGID=nobody
 ARG ALPINE_VERSION=3.18
 FROM alpine:${ALPINE_VERSION}
 LABEL Maintainer="CauseFX <causefx@me.com>"
@@ -75,13 +77,13 @@ RUN composer global require laravel/installer --optimize-autoloader --no-interac
 RUN composer global require symfony/var-dumper --optimize-autoloader --no-interaction --no-progress
 
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
-RUN chown -R nobody.nobody /var/www/html /run /var/lib/nginx /var/log/nginx /home/npm /home/composer
+RUN chown -R ${PUID}.${PGID} /var/www/html /run /var/lib/nginx /var/log/nginx /home/npm /home/composer
 
 # Switch to use a non-root user from here on
-USER nobody
+USER ${PUID}
 
 # Add application
-COPY --chown=nobody src/ /var/www/html/
+COPY --chown=${PUID} src/ /var/www/html/
 
 # Expose the port nginx is reachable on
 EXPOSE 8080-8081
