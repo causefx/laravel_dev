@@ -1,5 +1,4 @@
-ARG ALPINE_VERSION=3.18
-FROM alpine:${ALPINE_VERSION}
+FROM ghcr.io/linuxserver/baseimage-alpine:3.17
 LABEL Maintainer="CauseFX <causefx@me.com>"
 LABEL Description="Lightweight container with Nginx 1.24 & PHP 8.1 based on Alpine Linux."
 
