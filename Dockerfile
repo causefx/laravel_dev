@@ -92,7 +92,7 @@ EXPOSE 8080-8081
 # Configure a healthcheck to validate that everything is up&running
 HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:8080/fpm-ping
 
-COPY /etc /etc
+COPY /root /
 CMD sh /etc/cont-init.d/30-install
 
 # Add Composer vendor to path
