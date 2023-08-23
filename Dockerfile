@@ -1,5 +1,7 @@
 ARG PUID=nobody
 ARG PGID=nobody
+ENV PUID=$PUID
+ENV PGID=$PGID
 ARG ALPINE_VERSION=3.18
 FROM alpine:${ALPINE_VERSION}
 LABEL Maintainer="CauseFX <causefx@me.com>"
