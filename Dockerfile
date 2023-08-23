@@ -51,8 +51,8 @@ RUN mkdir /home/npm
 RUN mkdir /home/composer
 
 ENV COMPOSER_HOME /home/composer
-ENV PUID=$PUID
-ENV PGID=$PGID
+ENV PUID=${PUID}
+ENV PGID=${PGID}
 
 RUN npm -g config set cache /home/npm
 
