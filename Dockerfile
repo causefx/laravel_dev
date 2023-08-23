@@ -1,6 +1,7 @@
 ARG PUID=nobody
-ARG PGID=nobody
 ENV PUID ${PUID}
+
+ARG PGID=nobody
 ENV PGID ${PGID}
 
 ARG ALPINE_VERSION=3.18
