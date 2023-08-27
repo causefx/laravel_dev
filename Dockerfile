@@ -47,6 +47,7 @@ RUN apk add --no-cache \
 RUN mkdir /home/npm
 RUN mkdir /home/composer
 RUN mkdir -p /.config/psysh
+RUN mkdir /var/www/main
 
 ENV COMPOSER_HOME /home/composer
 
@@ -76,7 +77,7 @@ RUN composer global require laravel/installer --optimize-autoloader --no-interac
 RUN composer global require symfony/var-dumper --optimize-autoloader --no-interaction --no-progress
 
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
-RUN chown -R nobody.nobody /var/www/html /run /var/lib/nginx /var/log/nginx /home/npm /home/composer /.config/psysh
+RUN chown -R nobody.nobody /var/www/html /var/www/main /run /var/lib/nginx /var/log/nginx /home/npm /home/composer /.config/psysh
 
 # Switch to use a non-root user from here on
 USER nobody
