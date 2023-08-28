@@ -84,6 +84,7 @@ USER nobody
 
 # Add application
 COPY --chown=nobody src/ /var/www/html/
+COPY --chown=nobody src/main/ /var/www/main/
 
 # Expose the port nginx is reachable on
 EXPOSE 8080-8081
