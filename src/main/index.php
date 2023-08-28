@@ -27,41 +27,46 @@ function buildUrl($path)
 	<link rel="stylesheet" href="dist/spectre-icons.min.css">
   </head>
   <body>
-	<div class="hero bg-gray">
-	  <div class="hero-body">
-		<h1>Laravel Local Dev</h1>
-		<p>Projects below</p>
-	  </div>
-	</div>
-	<div>
-          <div class="container" id="cards">
-            <h3 class="s-title">Projects</h3>
-            <div class="columns">
-				<?php
-			    $d = dir("/var/www/html");
-				while(false !== ($entry = $d->read()))
-				{
-					if (!in_array($entry, ['.', '..'])) {
-						echo '
-						<div class="column col-3 col-xs-12">
-							<div class="card">
-							  <div class="card-header">
-								<div class="card-title h5">'.$entry.'</div>
-							  </div>
-							  <div class="card-footer">
-								<div class="btn-group btn-group-block">
-								  <a href="'.buildUrl($entry).'" class="btn btn-primary">Visit</a>
-								</div>
-							  </div>
+	<header class="navbar">
+	  <section class="navbar-section">
+		<a href="https://github.com/causefx/laravel_dev" class="btn btn-link">Github</a>
+		
+	  </section>
+	  <section class="navbar-center">
+		Laravel Local Dev
+	  </section>
+	  <section class="navbar-section">
+		
+		<a href="https://github.com/causefx/laravel_dev/issues/new" class="btn btn-link">Issue</a>
+	  </section>
+	</header>
+	<div class="divider"></div>
+	<div class="container" id="cards">
+		<div class="columns">
+			<?php
+			$d = dir("/var/www/html");
+			while(false !== ($entry = $d->read()))
+			{
+				if (!in_array($entry, ['.', '..'])) {
+					echo '
+					<div class="column col-3 col-xs-12">
+						<div class="card mb-2">
+						  <div class="card-header">
+							<div class="card-title h5">'.$entry.'</div>
+						  </div>
+						  <div class="card-footer">
+							<div class="btn-group btn-group-block">
+							  <a href="'.buildUrl($entry).'" class="btn btn-primary">Visit</a>
 							</div>
+						  </div>
 						</div>
-						';
-					}
+					</div>
+					';
 				}
-				$d->close();
-				?>
-            </div>
-          </div>
-        </div>
+			}
+			$d->close();
+			?>
+		</div>
+	</div>
   </body>
 </html>
