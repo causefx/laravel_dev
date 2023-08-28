@@ -9,9 +9,8 @@ function buildUrl($path)
         $data = parse_url($link);
         $host = $data['host'];
         $hostname = explode(".", $host);
-        return $data['scheme'] . "://". $path . "." . $hostname[count($hostname)-2] . "." . $hostname[count($hostname)-1] . ($data['port'] ? ":" . $data['port'] >
+        return $data['scheme'] . "://". $path . "." . $hostname[count($hostname)-2] . "." . $hostname[count($hostname)-1] . ($data['port'] ? ":" . $data['port'] : "");
 }
-
 ?>
 
 <html>
@@ -22,7 +21,7 @@ function buildUrl($path)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HTML 5 Boilerplate</title>
+    <title>Laravel Dev</title>
     <link rel="stylesheet" href="dist/spectre.min.css">
 	<link rel="stylesheet" href="dist/spectre-exp.min.css">
 	<link rel="stylesheet" href="dist/spectre-icons.min.css">
@@ -34,34 +33,33 @@ function buildUrl($path)
 		<p>Projects below</p>
 	  </div>
 	</div>
-	<div class="docs-content" id="content">
+	<div>
           <div class="container" id="cards">
-            <h3 class="s-title">Projects<a class="anchor" href="#cards" aria-hidden="true">#</a></h3>
+            <h3 class="s-title">Projects</h3>
             <div class="columns">
-              <div class="column col-6 col-xs-12">
-			  
 				<?php
 			    $d = dir("/var/www/html");
 				while(false !== ($entry = $d->read()))
 				{
 					if (!in_array($entry, ['.', '..'])) {
 						echo '
-						<div class="card">
-						  <div class="card-header">
-							<div class="card-title h5">Apple</div>
-						  </div>
-						  <div class="card-footer">
-							<div class="btn-group btn-group-block">
-							  <a href="'.buildUrl($entry).'" class="btn btn-primary">'.$entry.'</a>
+						<div class="column col-3 col-xs-12">
+							<div class="card">
+							  <div class="card-header">
+								<div class="card-title h5">'.$entry.'</div>
+							  </div>
+							  <div class="card-footer">
+								<div class="btn-group btn-group-block">
+								  <a href="'.buildUrl($entry).'" class="btn btn-primary">Visit</a>
+								</div>
+							  </div>
 							</div>
-						  </div>
 						</div>
 						';
 					}
 				}
 				$d->close();
 				?>
-              </div>
             </div>
           </div>
         </div>
