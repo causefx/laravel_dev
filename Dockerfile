@@ -10,6 +10,7 @@ WORKDIR /var/www/html
 RUN apk add --no-cache \
   curl \
   git \
+  nano \
   nginx \
   npm \
   php82 \
