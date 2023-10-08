@@ -10,6 +10,7 @@ WORKDIR /var/www/html
 RUN apk add --no-cache \
   curl \
   git \
+  libcap \
   nano \
   nginx \
   npm \
