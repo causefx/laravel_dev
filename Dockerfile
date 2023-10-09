@@ -86,7 +86,7 @@ RUN composer global require laravel/installer --optimize-autoloader --no-interac
 RUN composer global require symfony/var-dumper --optimize-autoloader --no-interaction --no-progress
 
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
-RUN chown -R nobody.nobody /var/www/html /var/www/main /run /var/lib/nginx /var/log/nginx /home/npm /home/composer /.config/psysh /etc/crontabs/nobody /scripts
+RUN chown -R nobody.nobody /var/www/html /var/www/main /run /var/lib/nginx /var/log/nginx /home/npm /home/composer /.config/psysh /etc/crontabs/nobody /scripts /etc/nginx/conf.d/
 
 #ENTRYPOINT ["startup.sh"]
 
