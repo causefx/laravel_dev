@@ -10,3 +10,5 @@ else
 fi
 
 sed -i "s|domain.tld|${DOMAIN}|g" /etc/nginx/conf.d/dev-local.conf
+
+/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
