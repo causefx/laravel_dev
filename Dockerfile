@@ -50,6 +50,7 @@ RUN mkdir /home/npm
 RUN mkdir /home/composer
 RUN mkdir -p /.config/psysh
 RUN mkdir /var/www/main
+RUN mkdir /scripts
 RUN touch /etc/crontabs/nobody
 
 ENV COMPOSER_HOME /home/composer
@@ -82,6 +83,11 @@ RUN composer global require symfony/var-dumper --optimize-autoloader --no-intera
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /var/www/html /var/www/main /run /var/lib/nginx /var/log/nginx /home/npm /home/composer /.config/psysh /etc/crontabs/nobody
 
+# Replace domain name
+COPY startup.sh /scripts
+RUN chmod +x /scripts/startup.sh
+ENTRYPOINT ["startup.sh"]
+
 #RUN setcap CAP_SETGID=ep /usr/sbin/crond
 #CMD ["crond", "-l", "2", "-b"]
 
@@ -96,7 +102,7 @@ COPY --chown=nobody src/main/ /var/www/main/
 EXPOSE 8080-8081
 
 # Let supervisord start nginx & php-fpm
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+RUN /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
 
 # Configure a healthcheck to validate that everything is up&running
 HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:8080/fpm-ping
