@@ -62,10 +62,15 @@ COPY config/nginx.conf /etc/nginx/nginx.conf
 
 # Configure nginx - default server
 COPY config/conf.d /etc/nginx/conf.d/
+RUN chmod 777 /etc/nginx/conf.d/dev-local.conf
 
 # Configure PHP-FPM
 COPY config/fpm-pool.conf /etc/php82/php-fpm.d/www.conf
 COPY config/php.ini /etc/php82/conf.d/custom.ini
+
+# Replace domain name
+COPY startup.sh /scripts
+RUN chmod +x /scripts/startup.sh
 
 # Configure supervisord
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -81,12 +86,9 @@ RUN composer global require laravel/installer --optimize-autoloader --no-interac
 RUN composer global require symfony/var-dumper --optimize-autoloader --no-interaction --no-progress
 
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
-RUN chown -R nobody.nobody /var/www/html /var/www/main /run /var/lib/nginx /var/log/nginx /home/npm /home/composer /.config/psysh /etc/crontabs/nobody
+RUN chown -R nobody.nobody /var/www/html /var/www/main /run /var/lib/nginx /var/log/nginx /home/npm /home/composer /.config/psysh /etc/crontabs/nobody /scripts
 
-# Replace domain name
-COPY startup.sh /scripts
-RUN chmod +x /scripts/startup.sh
-ENTRYPOINT ["startup.sh"]
+#ENTRYPOINT ["startup.sh"]
 
 #RUN setcap CAP_SETGID=ep /usr/sbin/crond
 #CMD ["crond", "-l", "2", "-b"]
@@ -102,7 +104,7 @@ COPY --chown=nobody src/main/ /var/www/main/
 EXPOSE 8080-8081
 
 # Let supervisord start nginx & php-fpm
-RUN /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+CMD ["/scripts/startup.sh"]
 
 # Configure a healthcheck to validate that everything is up&running
 HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:8080/fpm-ping
