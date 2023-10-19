@@ -101,7 +101,7 @@ COPY --chown=nobody src/ /var/www/html/
 COPY --chown=nobody src/main/ /var/www/main/
 
 # Expose the port nginx is reachable on
-EXPOSE 8080-8081
+EXPOSE 8080-8089 5173
 
 # Let supervisord start nginx & php-fpm
 CMD ["/scripts/startup.sh"]
